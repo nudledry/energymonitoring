@@ -1,0 +1,49 @@
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <title>Create Target Usage</title>
+</head>
+<body class="d-flex flex-column h-100">
+<section layout:fragment="body" class="py-5">
+    <main class="flex-shrink-0">
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-header">
+                    Add Target Usage
+                </div>
+                <div class="card-body">
+                    <form role="form" method="post" th:action="@{/target-usage/{userId}(userId=${userId})}" th:object="${targetUsage}">
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Time</label>
+                            <input
+                                    type="datetime-local"
+                                    class="form-control"
+                                    th:field="*{time}"
+                                    id="time"
+                                    name="time"
+                                    placeholder="Time">
+                            <p th:if="${#fields.hasErrors('time')}" class="text-danger" th:errors="*{time}"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="target" class="form-label">Target</label>
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    th:field="*{target}"
+                                    id="target"
+                                    name="target"
+                                    placeholder="Target">
+                        </div>
+                        <p th:if="${#fields.hasErrors('target')}" class="text-danger" th:errors="*{target}"></p>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</section>
+
+</body>
+</html>

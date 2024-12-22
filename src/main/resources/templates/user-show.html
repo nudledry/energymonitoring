@@ -1,0 +1,51 @@
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <title>User Detail</title>
+</head>
+<body class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+    <section layout:fragment="body" class="py-5">
+        <div class="container px-5 my-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-6">
+                    <div class="text-center mb-5">
+                        <h1 th:text="${user.username}" class="fw-bolder"></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col">
+                    <div class="mb-5">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">Time</th>
+                                <th scope="col">Target (kWh)</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="targetUsage : ${user.targetUsages}">
+                                <td><span th:text="${#temporals.format(targetUsage.time, 'yyyy-MM-dd HH:mm')}"></span></td>
+                                <td><span th:text="${targetUsage.target}"></span></td>
+                                <td>
+                                    <a class="btn btn-sm btn-warning" th:href="@{/target-usage/{targetUsageId}/edit(targetUsageId=${targetUsage.id})}">Edit</a>
+                                    <a class="btn btn-sm btn-danger" th:href="@{/target-usage/{targetUsageId}/delete(targetUsageId=${targetUsage.id})}">Delete</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-end mt-3">
+                            <a class="btn btn-primary" th:href="@{/target-usage/{userId}/new(userId=${user.id})}">Add Target</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
