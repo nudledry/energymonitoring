@@ -25,6 +25,7 @@ public class UserEntity {
     private String username;
     private String password;
     private String email;
+    private int target;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -32,8 +33,8 @@ public class UserEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<TargetUsage> targetUsages = new ArrayList<>();
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
+    private List<EnergyUsage> energyUsages = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(

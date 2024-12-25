@@ -14,15 +14,15 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TargetUsageDto {
+public class EnergyUsageDto {
     private Long id;
 
     @NotNull(message = "Time is required")
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime time;
 
-    @NotNull(message = "Target is required")
-    private Double target;
+    @NotNull(message = "Amount is required")
+    private Double useAmount;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

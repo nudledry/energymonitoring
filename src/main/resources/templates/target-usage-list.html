@@ -22,9 +22,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="targetUsages : ${targetUsage}">
-          <td><span th:text="${#temporals.format(targetUsages.time, 'yyyy-MM-dd HH:mm')}"></span></td>
-          <td><span th:text="${targetUsages.target}"></span> kWh</td>
+        <tr th:each="energyUsages : ${energyUsage}">
+          <td><span th:text="${#temporals.format(energyUsages.time, 'yyyy-MM-dd HH:mm')}"></span></td>
+          <td><span th:text="${energyUsages.target}"></span> kWh</td>
         </tr>
         </tbody>
       </table>

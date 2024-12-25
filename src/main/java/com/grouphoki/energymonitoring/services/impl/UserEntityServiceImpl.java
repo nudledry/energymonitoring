@@ -34,6 +34,18 @@ public class UserEntityServiceImpl implements UserEntityService {
         userEntityRepository.save(userEntity);
 
     }
+
+    @Override
+    public void updateUser(UserEntity userEntity) {
+        UserEntity user = userEntityRepository.findById(userEntity.getId()).get();
+        user.setUsername(userEntity.getUsername());
+        user.setEmail(userEntity.getEmail());
+        user.setPassword(userEntity.getPassword());
+        user.setRoles(userEntity.getRoles());
+        user.setTarget(userEntity.getTarget());
+        userEntityRepository.save(userEntity);
+    }
+
     @Override
     public UserEntity findByEmail(String email) {
         return userEntityRepository.findByEmail(email);
@@ -43,4 +55,5 @@ public class UserEntityServiceImpl implements UserEntityService {
     public UserEntity findByUsername(String username) {
         return userEntityRepository.findByUsername(username);
     }
+
 }

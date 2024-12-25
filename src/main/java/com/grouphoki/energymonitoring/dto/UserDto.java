@@ -22,6 +22,6 @@ public class UserDto {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<TargetUsageDto> targetUsages;
+    private List<EnergyUsageDto> targetUsages;
 
 }

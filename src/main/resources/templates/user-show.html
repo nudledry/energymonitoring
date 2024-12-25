@@ -28,12 +28,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="targetUsage : ${user.targetUsages}">
-                                <td><span th:text="${#temporals.format(targetUsage.time, 'yyyy-MM-dd HH:mm')}"></span></td>
-                                <td><span th:text="${targetUsage.target}"></span></td>
+                            <tr th:each="energyUsage : ${user.energyUsages}">
+                                <td><span th:text="${#temporals.format(energyUsage.time, 'yyyy-MM-dd HH:mm')}"></span></td>
+                                <td><span th:text="${energyUsage.target}"></span></td>
                                 <td>
-                                    <a class="btn btn-sm btn-warning" th:href="@{/target-usage/{targetUsageId}/edit(targetUsageId=${targetUsage.id})}">Edit</a>
-                                    <a class="btn btn-sm btn-danger" th:href="@{/target-usage/{targetUsageId}/delete(targetUsageId=${targetUsage.id})}">Delete</a>
+                                    <a class="btn btn-sm btn-warning" th:href="@{/target-usage/{targetUsageId}/edit(targetUsageId=${energyUsage.id})}">Edit</a>
+                                    <a class="btn btn-sm btn-danger" th:href="@{/target-usage/{targetUsageId}/delete(targetUsageId=${energyUsage.id})}">Delete</a>
                                 </td>
                             </tr>
                             </tbody>

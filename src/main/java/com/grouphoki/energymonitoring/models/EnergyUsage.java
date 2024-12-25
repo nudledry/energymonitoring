@@ -15,14 +15,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "target_usage")
-public class TargetUsage {
+@Table(name = "energy_usage")
+public class EnergyUsage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDateTime time;
-    private Double target;
+    private Double useAmount;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -31,6 +31,6 @@ public class TargetUsage {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "created_by", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity createdBy;
 }

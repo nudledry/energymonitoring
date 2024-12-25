@@ -14,7 +14,7 @@
                     Add Target Usage
                 </div>
                 <div class="card-body">
-                    <form role="form" method="post" th:action="@{/target-usage/{userId}(userId=${userId})}" th:object="${targetUsage}">
+                    <form role="form" method="post" th:action="@{/target-usage/{userId}(userId=${userId})}" th:object="${energyUsage}">
                         <div class="mb-3">
                             <label for="time" class="form-label">Time</label>
                             <input
