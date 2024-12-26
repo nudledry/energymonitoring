@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.security.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -22,12 +23,15 @@ public class News {
     private Long id;
 
     private String title;
+    @Lob
     private String content;
+
     private String imageUrl;
+    private String source;
 
     @CreationTimestamp
-    private Timestamp createdOn;
+    private LocalDateTime createdOn;
 
     @UpdateTimestamp
-    private Timestamp updatedOn;
+    private LocalDateTime updatedOn;
 }

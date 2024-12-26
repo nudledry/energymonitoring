@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/dashboard-layout}">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Admin Dashboard</li>
+        </ol>
+        <div th:if="${param.success}" class="alert alert-success">
+            Data changed successfully
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Edit Account</h3></div>
+                    <div class="card-body">
+                        <form role="form" method="post" th:action="@{/admin/{userId}/edit(userId=${user.id})}" th:object="${user}">
+                            <div class=" mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        th:field="*{username}"
+                                        id="username"
+                                        name="username"
+                                        required>
+                                <p th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input
+                                        type="email"
+                                        class="form-control"
+                                        th:field="*{email}"
+                                        id="email"
+                                        name="email"
+                                        required>
+                                <p th:if="${#fields.hasErrors('email')}" class="text-danger" th:errors="*{email}"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input
+                                        type="password"
+                                        class="form-control"
+                                        th:field="*{password}"
+                                        id="password"
+                                        name="password"
+                                        required>
+                                <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
+                            </div>
+                            <div>
+                                <a class="btn btn-secondary" th:href="@{/admin/dashboard}">Back</a>
+                                <button type="submit" class="btn btn-primary float-end mx-2">Submit</button>
+                                <a th:href="@{admin/{userId}/edit(userId=${user.id})}" class="btn btn-danger float-end">Delete</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

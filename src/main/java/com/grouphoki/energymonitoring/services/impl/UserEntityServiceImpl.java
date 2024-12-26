@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class UserEntityServiceImpl implements UserEntityService {
     private UserEntityRepository userEntityRepository;
@@ -36,14 +38,13 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
-    public void updateUser(UserEntity userEntity) {
-        UserEntity user = userEntityRepository.findById(userEntity.getId()).get();
-        user.setUsername(userEntity.getUsername());
-        user.setEmail(userEntity.getEmail());
-        user.setPassword(userEntity.getPassword());
-        user.setRoles(userEntity.getRoles());
-        user.setTarget(userEntity.getTarget());
+    public void updateUserEntity(UserEntity userEntity) {
         userEntityRepository.save(userEntity);
+    }
+
+    @Override
+    public void deleteUserEntity(Long userId) {
+        userEntityRepository.deleteById(userId);
     }
 
     @Override
@@ -54,6 +55,16 @@ public class UserEntityServiceImpl implements UserEntityService {
     @Override
     public UserEntity findByUsername(String username) {
         return userEntityRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserEntity findById(Long userId) {
+        return userEntityRepository.findById(userId).get();
+    }
+
+    @Override
+    public List<UserEntity> getAll() {
+        return userEntityRepository.findAll();
     }
 
 }

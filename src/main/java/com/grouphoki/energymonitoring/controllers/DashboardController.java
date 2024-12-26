@@ -30,14 +30,23 @@ public class DashboardController {
 
     @GetMapping("/admin/dashboard")
     @PreAuthorize("hasRole('ROLE_ADMIN')")// Ensure only admins can access this
-    public String adminDashboard() {
+    public String adminDashboard(Model model) {
+        UserEntity user = new UserEntity();
+        String username = SecurityUtil.getSessionUser();
+        if (username != null) {
+            user = userEntityService.findByUsername(username);
+            model.addAttribute("user", user);
+
+            List<UserEntity> allUser = userEntityService.getAll();
+            model.addAttribute("allUser", allUser);
+        }
+
         return "admin/dashboard"; // View name for admin dashboard
     }
 
     @GetMapping("/user/dashboard")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String userDashboard(Model model) {
-
         UserEntity user = new UserEntity();
         String username = SecurityUtil.getSessionUser();
 
@@ -58,9 +67,18 @@ public class DashboardController {
     @GetMapping("/user/dashboard/news")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String userNews(Model model) {
-        List<News> news = newsService.getAllNews();
-        model.addAttribute("news", news);
-        return "/user/dashboard/news";
+        UserEntity user = new UserEntity();
+        String username = SecurityUtil.getSessionUser();
+
+        if (username != null) {
+            user = userEntityService.findByUsername(username);
+            model.addAttribute("user", user);
+
+            List<News> newsList = newsService.getAllNews();
+            model.addAttribute("newsList", newsList);
+        }
+
+        return "user/news";
     }
 
 }
