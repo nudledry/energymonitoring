@@ -13,4 +13,6 @@ public interface EnergyUsageRepository extends JpaRepository<EnergyUsage, Long> 
     @Query("SELECT new com.grouphoki.energymonitoring.dto.EnergyUsageDto(e.id, e.time, e.useAmount, e.createdAt, e.updatedAt, e.createdBy) " +
             "FROM EnergyUsage e WHERE e.createdBy = :createdBy")
     List<EnergyUsageDto> findByCreatedBy(@Param("createdBy") UserEntity createdBy);
+
+    void deleteAllByCreatedBy(UserEntity user);
 }

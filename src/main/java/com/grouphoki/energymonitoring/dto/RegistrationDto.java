@@ -1,6 +1,7 @@
 package com.grouphoki.energymonitoring.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
@@ -17,4 +18,7 @@ public class RegistrationDto {
 
     @NotEmpty(message = "Password is required")
     private String password;
+
+    @Min(value = 0, message = "Target must be positive")
+    private int target;
 }

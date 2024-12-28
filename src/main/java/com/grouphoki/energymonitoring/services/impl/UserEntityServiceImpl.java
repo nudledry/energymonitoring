@@ -38,13 +38,32 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
+    public void saveAdminUserEntity(RegistrationDto registrationDto) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(registrationDto.getUsername());
+        userEntity.setEmail(registrationDto.getEmail());
+        userEntity.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
+
+        Role role = roleRepository.findByName("ADMIN");
+        userEntity.setRoles(Arrays.asList(role));
+        userEntityRepository.save(userEntity);
+    }
+
+    @Override
     public void updateUserEntity(UserEntity userEntity) {
         userEntityRepository.save(userEntity);
     }
 
     @Override
-    public void deleteUserEntity(Long userId) {
-        userEntityRepository.deleteById(userId);
+    public void deleteUserEntity(UserEntity userEntity) {
+        userEntity.getRoles().clear();
+        userEntityRepository.save(userEntity);
+        userEntityRepository.deleteById(userEntity.getId());
+    }
+
+    @Override
+    public void saveTarget(UserEntity currentUser) {
+        userEntityRepository.save(currentUser);
     }
 
     @Override

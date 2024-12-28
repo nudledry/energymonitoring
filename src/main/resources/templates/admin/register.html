@@ -1,70 +1,66 @@
 <html
         xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
+        layout:decorate="~{layouts/dashboard-layout}">
 <head>
-    <title>Register</title>
+    <title>Create Admin</title>
 </head>
 <body class="d-flex flex-column h-100">
-<section layout:fragment="body" class="py-5">
-    <main>
-        <div class="container">
-            <div th:if="${param.success}" class="alert alert-success">
-                You are registered successfully!
-            </div>
+<main layout:fragment="content">
+        <div class="container-fluid px-4">
             <div th:if="${param.fail}" class="alert alert-secondary">
                 Username or email already exist!
             </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-7">
-                    <div class="card shadow-lg border-0 rounded-lg mt-5">
-                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
-                        <div class="card-body">
-                            <form role="form" method="post" th:action="@{/register/admin/save}" th:object="${user}">
-                                <div class=" mb-3">
-                                    <label for="username" class="form-label">Username</label>
-                                    <input
-                                            type="text"
-                                            class="form-control"
-                                            th:field="*{username}"
-                                            id="username"
-                                            name="username">
-                                    <p th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input
-                                            type="email"
-                                            class="form-control"
-                                            th:field="*{email}"
-                                            id="email"
-                                            name="email">
-                                    <p th:if="${#fields.hasErrors('email')}" class="text-danger" th:errors="*{email}"></p>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input
-                                            type="password"
-                                            class="form-control"
-                                            th:field="*{password}"
-                                            id="password"
-                                            name="password">
-                                    <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
-                                </div>
-                                <div class="mt-4 mb-0">
-                                    <div class="d-grid"><button type="submit" class="btn btn-primary btn-block">Create Account</button></div>
-                                </div>
-                            </form>
+            <h1 class="mt-4">Dashboard</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a th:href="@{/admin/dashboard}">Admin Dashboard</a></li>
+                <li class="breadcrumb-item active">Add Admin</li>
+            </ol>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fa-solid fa-address-card"></i>
+                    Add New Admin
+                </div>
+                <div class="card-body">
+                    <form role="form" method="post" th:action="@{/admin/save}" th:object="${user}">
+                        <div class=" mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    th:field="*{username}"
+                                    id="username"
+                                    name="username">
+                            <p th:if="${#fields.hasErrors('username')}" class="text-danger" th:errors="*{username}"></p>
                         </div>
-                        <div class="card-footer text-center py-3">
-                            <div class="small"><a th:href="@{/login}">Have an account? Go to login</a></div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input
+                                    type="email"
+                                    class="form-control"
+                                    th:field="*{email}"
+                                    id="email"
+                                    name="email">
+                            <p th:if="${#fields.hasErrors('email')}" class="text-danger" th:errors="*{email}"></p>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input
+                                    type="password"
+                                    class="form-control"
+                                    th:field="*{password}"
+                                    id="password"
+                                    name="password">
+                            <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
+                        </div>
+                        <div class="d-grid gap-2 mt-4 mb-0">
+                            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                            <a th:href="@{/admin/dashboard}" class="btn btn-secondary">Back</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </main>
-</section>
-
 </body>
 </html>

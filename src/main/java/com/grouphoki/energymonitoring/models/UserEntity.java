@@ -1,6 +1,7 @@
 package com.grouphoki.energymonitoring.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,6 +26,8 @@ public class UserEntity {
     private String username;
     private String password;
     private String email;
+
+    @Min(value = 0, message = "Target must be positive")
     private int target;
 
     @CreationTimestamp
@@ -36,7 +39,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
     private List<EnergyUsage> energyUsages = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

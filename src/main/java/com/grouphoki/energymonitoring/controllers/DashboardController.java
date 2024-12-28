@@ -1,6 +1,7 @@
 package com.grouphoki.energymonitoring.controllers;
 
 import com.grouphoki.energymonitoring.dto.EnergyUsageDto;
+import com.grouphoki.energymonitoring.models.EnergyUsage;
 import com.grouphoki.energymonitoring.models.News;
 import com.grouphoki.energymonitoring.models.UserEntity;
 import com.grouphoki.energymonitoring.security.SecurityUtil;
@@ -29,7 +30,7 @@ public class DashboardController {
     }
 
     @GetMapping("/admin/dashboard")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")// Ensure only admins can access this
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminDashboard(Model model) {
         UserEntity user = new UserEntity();
         String username = SecurityUtil.getSessionUser();
@@ -56,6 +57,11 @@ public class DashboardController {
 
             List<EnergyUsageDto> energyUsageDto = energyUsageService.getEnergyUsageByUser(username);
             model.addAttribute("energyUsage", energyUsageDto);
+
+            Double totalEnergyUsage = user.getEnergyUsages().stream()
+                    .mapToDouble(EnergyUsage::getUseAmount)
+                    .sum();
+            model.addAttribute("totalEnergyUsage", totalEnergyUsage);
         }
 
         EnergyUsageDto energyUsageNew = new EnergyUsageDto();
