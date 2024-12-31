@@ -30,19 +30,19 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/login", "/register", "/register/save", "/css/**", "/js/**").permitAll() // Public routes
+                .requestMatchers("/", "/login", "/register", "/register/save", "/css/**", "/js/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated() // Secure all other routes
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login") // Custom login page
-                .successHandler(successHandler) // Use the custom success handler
-                .failureUrl("/login?error=true") // Redirect back to login on failure
+                .loginPage("/login")
+                .successHandler(successHandler)
+                .failureUrl("/login?error=true")
                 .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout") // Redirect to login after logout
+                .logoutSuccessUrl("/login?logout")
                 .permitAll();
 
         return http.build();

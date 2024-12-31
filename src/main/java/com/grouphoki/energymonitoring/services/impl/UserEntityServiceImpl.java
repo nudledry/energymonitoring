@@ -1,11 +1,14 @@
 package com.grouphoki.energymonitoring.services.impl;
 
 import com.grouphoki.energymonitoring.dto.RegistrationDto;
+import com.grouphoki.energymonitoring.exception.ResourceNotFoundException;
 import com.grouphoki.energymonitoring.models.Role;
 import com.grouphoki.energymonitoring.models.UserEntity;
 import com.grouphoki.energymonitoring.repository.RoleRepository;
 import com.grouphoki.energymonitoring.repository.UserEntityRepository;
 import com.grouphoki.energymonitoring.services.UserEntityService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -86,4 +89,11 @@ public class UserEntityServiceImpl implements UserEntityService {
         return userEntityRepository.findAll();
     }
 
+    @Override
+    public UserEntity getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+        return userEntityRepository.findByUsername(currentUsername);
+    }
 }

@@ -21,4 +21,6 @@ public interface UserEntityService {
     UserEntity findById(Long userId);
 
     List<UserEntity> getAll();
+
+    UserEntity getCurrentUser();
 }

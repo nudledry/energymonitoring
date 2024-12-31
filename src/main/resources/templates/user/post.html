@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/dashboard-layout}">
+<head>
+    <title>Post</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a th:href="@{/user/dashboard}">User Dashboard</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/user/dashboard/community}">Community</a></li>
+            <li class="breadcrumb-item active">Post</li>
+        </ol>
+        <!-- Post Detail -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-sharp-duotone fa-solid fa-blog me-1 fs-4"></i>
+                <span class="card-title fs-4 fw-bolder" th:text="${post.title}"></span>
+                <small class="text-muted">
+                    Posted by <span th:text="${post.createdBy}"></span>
+                    on <span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+                </small>
+            </div>
+            <div class="card-body">
+                <p class="card-text" th:text="${post.content}"></p>
+            </div>
+        </div>
+
+        <!-- Comment Form -->
+        <div class="card mb-4" sec:authorize="isAuthenticated()">
+            <div class="card-header">
+                <i class="fa-solid fa-plus me-1"></i>
+                Add Comment
+            </div>
+            <div class="card-body">
+                <form th:action="@{/user/dashboard/community/post/{postId}/comment(postId=${post.id})}" method="post" th:object="${newComment}">
+                    <div class="mb-3">
+                        <textarea class="form-control" th:field="*{content}" rows="3" required></textarea>
+                        <div class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Comment</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Comments List -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-comment me-1"></i>
+                Comments
+            </div>
+            <div class="card-body">
+                <div class="mb-3" th:each="comment : ${comments}">
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">
+                            <span th:text="${comment.createdBy}"></span>
+                            on <span th:text="${#temporals.format(comment.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+                        </small>
+                    </div>
+                    <p th:text="${comment.content}"></p>
+                    <hr th:if="${!commentStat.last}">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
