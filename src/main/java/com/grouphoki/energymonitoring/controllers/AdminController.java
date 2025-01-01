@@ -5,6 +5,7 @@ import com.grouphoki.energymonitoring.models.UserEntity;
 import com.grouphoki.energymonitoring.services.UserEntityService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,10 +49,14 @@ public class AdminController {
     }
 
     @PostMapping("/{userId}/delete")
-    public String delete(@PathVariable Long userId, UserEntity user) {
+    public String delete(@PathVariable Long userId) {
         UserEntity existingUser = userEntityService.findById(userId);
-        userEntityService.deleteUserEntity(existingUser);
-        return "redirect:/admin/dashboard?deleted";
+        if (existingUser != null) {
+            userEntityService.deleteUserEntity(existingUser);
+            return "redirect:/admin/dashboard?deleted";
+        }
+
+        return "redirect:/admin/dashboard?userNotFound";
     }
 
     @GetMapping("/new")
@@ -82,7 +87,7 @@ public class AdminController {
         }
 
         userEntityService.saveUserEntity(user);
-        return "redirect:admin/dashboard?created";
+        return "redirect:/admin/dashboard?created";
     }
 
 

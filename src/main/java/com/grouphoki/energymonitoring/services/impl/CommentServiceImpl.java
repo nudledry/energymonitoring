@@ -49,6 +49,25 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public CommentDto getComment(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        return convertToDto(comment);
+    }
+
+    @Override
+    public void deleteComment(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        commentRepository.delete(comment);
+    }
+
+    @Override
+    public void deleteAllCommentsFromPost(Long postId) {
+        commentRepository.deleteByPostId(postId);
+    }
+
+    @Override
     public CommentDto convertToDto(Comment comment) {
         CommentDto dto = new CommentDto();
         dto.setId(comment.getId());

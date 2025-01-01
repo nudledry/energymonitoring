@@ -1,10 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/admin-dashboard-layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Post</title>
 </head>
 <body>
+<main layout:fragment="content">
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a th:href="@{/admin/dashboard}">Admin Dashboard</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/admin/dashboard/community}">Community</a></li>
+            <li class="breadcrumb-item active">Post</li>
+        </ol>
+        <!-- Post Detail -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fa-sharp-duotone fa-solid fa-blog me-1 fs-4"></i>
+                        <span class="card-title fs-4 fw-bolder" th:text="${post.title}"></span>
+                        <small class="text-muted d-block">
+                            Posted by <span th:text="${post.createdBy}"></span>
+                            on <span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+                        </small>
+                    </div>
+                    <div class="btn-group">
+                        <form th:action="@{/admin/dashboard/community/post/{id}/delete(id=${post.id})}"
+                              method="post"
+                              style="display: inline;"
+                              onsubmit="return confirm('Are you sure you want to delete this post?');">
+                            <button type="submit" class="btn btn-danger btn-sm me-2">
+                                <i class="fas fa-trash"></i>
+                                Delete Post
+                            </button>
+                        </form>
+                        <form th:action="@{/admin/dashboard/community/post/{id}/comments/delete-all(id=${post.id})}"
+                              method="post"
+                              style="display: inline;"
+                              onsubmit="return confirm('Are you sure you want to delete all comments from this post?');">
+                            <button type="submit" class="btn btn-warning btn-sm">
+                                <i class="fas fa-trash-alt"></i>
+                                Delete All Comments
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-text" th:text="${post.content}"></p>
+            </div>
+        </div>
 
+        <!-- Comment Form -->
+        <div class="card mb-4" sec:authorize="isAuthenticated()">
+            <div class="card-header">
+                <i class="fa-solid fa-plus me-1"></i>
+                Add Comment
+            </div>
+            <div class="card-body">
+                <form th:action="@{/admin/dashboard/community/post/{postId}/comment(postId=${post.id})}" method="post" th:object="${newComment}">
+                    <div class="mb-3">
+                        <textarea class="form-control" th:field="*{content}" rows="3" required></textarea>
+                        <div class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Comment</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Comments List -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-comment me-1"></i>
+                Comments
+            </div>
+            <div class="card-body">
+                <div class="mb-3" th:each="comment : ${comments}">
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">
+                            <span th:text="${comment.createdBy}"></span>
+                            on <span th:text="${#temporals.format(comment.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+                        </small>
+                        <div th:if="${comment.createdBy == #authentication.principal.username}">
+                            <form th:action="@{/admin/dashboard/community/post/{postId}/comment/{commentId}/delete(postId=${post.id},commentId=${comment.id})}"
+                                  method="post"
+                                  style="display: inline;"
+                                  onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <p th:text="${comment.content}"></p>
+                    <hr th:if="${!commentStat.last}">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>

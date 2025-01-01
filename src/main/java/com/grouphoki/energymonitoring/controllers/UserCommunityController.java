@@ -140,4 +140,16 @@ public class UserCommunityController {
         commentService.createComment(commentDto);
         return "redirect:/user/dashboard/community/post/" + postId;
     }
+
+    @PostMapping("/post/{postId}/comment/{commentId}/delete")
+    public String deleteComment(@PathVariable Long postId, @PathVariable Long commentId) {
+        String username = SecurityUtil.getSessionUser();
+        CommentDto comment = commentService.getComment(commentId);
+
+        if (comment.getCreatedBy().equals(username)) {
+            commentService.deleteComment(commentId);
+        }
+
+        return "redirect:/user/dashboard/community/post/" + postId;
+    }
 }

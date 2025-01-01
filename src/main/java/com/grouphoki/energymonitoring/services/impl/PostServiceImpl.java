@@ -4,6 +4,7 @@ import com.grouphoki.energymonitoring.dto.PostDto;
 import com.grouphoki.energymonitoring.exception.ResourceNotFoundException;
 import com.grouphoki.energymonitoring.mapper.PostMapper;
 import com.grouphoki.energymonitoring.models.Post;
+import com.grouphoki.energymonitoring.repository.CommentRepository;
 import com.grouphoki.energymonitoring.repository.PostRepository;
 import com.grouphoki.energymonitoring.security.SecurityUtil;
 import com.grouphoki.energymonitoring.services.PostService;
@@ -20,12 +21,14 @@ import java.util.stream.Collectors;
 @Transactional
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final UserEntityService userService;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, UserEntityService userService) {
+    public PostServiceImpl(PostRepository postRepository, UserEntityService userService, CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.userService = userService;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -69,15 +72,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void deletePost(Long id) {
-        String username = SecurityUtil.getSessionUser();
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+                .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        if (!post.getCreatedBy().getUsername().equals(username)) {  // Changed to get username from UserEntity
-            throw new IllegalStateException("You are not authorized to delete this post");
-        }
+        commentRepository.deleteByPostId(id);
 
         postRepository.delete(post);
+    }
+
+    @Override
+    public void deleteAllPosts() {
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
     }
 }
