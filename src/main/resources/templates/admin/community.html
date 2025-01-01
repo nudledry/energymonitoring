@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/dashboard-layout}">
+<head>
+    <title>Community</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a th:href="@{/admin/dashboard}">Admin Dashboard</a></li>
+            <li class="breadcrumb-item active">Community</li>
+        </ol>
+        <!-- Create Post Form -->
+        <div class="card mb-4" sec:authorize="isAuthenticated()">
+            <div class="card-header">
+                <i class="fa-solid fa-plus me-1"></i>
+                Create New Post
+            </div>
+            <div class="card-body">
+                <form th:action="@{/user/dashboard/community/post/create}" method="post" th:object="${newPost}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Content</label>
+                        <textarea class="form-control" id="content" th:field="*{content}" rows="3" required></textarea>
+                        <div class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Post</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Posts List -->
+        <div class="card mb-4" th:each="post : ${posts}">
+            <div class="card-header">
+                <i class="fa-sharp-duotone fa-solid fa-blog me-1"></i>
+                <span class="card-title fw-bolder" th:text="${post.title}"></span>
+                <small class="text-muted">
+                    Posted by <span th:text="${post.createdBy}"></span>
+                    on <span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+                </small>
+            </div>
+            <div class="card-body">
+                <p class="card-text" th:text="${post.content}"></p>
+                <a th:href="@{/user/dashboard/community/post/{id}(id=${post.id})}" class="btn btn-primary">
+                    View Discussion (<span th:text="${post.commentCount}"></span> comments)
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

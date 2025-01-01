@@ -2,10 +2,13 @@ package com.grouphoki.energymonitoring.services.impl;
 
 import com.grouphoki.energymonitoring.dto.PostDto;
 import com.grouphoki.energymonitoring.exception.ResourceNotFoundException;
+import com.grouphoki.energymonitoring.mapper.PostMapper;
 import com.grouphoki.energymonitoring.models.Post;
 import com.grouphoki.energymonitoring.repository.PostRepository;
+import com.grouphoki.energymonitoring.security.SecurityUtil;
 import com.grouphoki.energymonitoring.services.PostService;
 import com.grouphoki.energymonitoring.services.UserEntityService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +32,7 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> getAllPosts() {
         return postRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
-                .map(this::convertToDto)
+                .map(PostMapper::mapToPostDto)
                 .collect(Collectors.toList());
     }
 
@@ -37,7 +40,7 @@ public class PostServiceImpl implements PostService {
     public PostDto getPost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
-        return convertToDto(post);
+        return PostMapper.mapToPostDto(post);
     }
 
     @Override
@@ -50,14 +53,31 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto convertToDto(Post post) {
-        PostDto dto = new PostDto();
-        dto.setId(post.getId());
-        dto.setTitle(post.getTitle());
-        dto.setContent(post.getContent());
-        dto.setCreatedAt(post.getCreatedAt());
-        dto.setCreatedBy(post.getCreatedBy().getUsername());
-        dto.setCommentCount(post.getComments().size());
-        return dto;
+    public void updatePost(PostDto postDto) {
+        String username = SecurityUtil.getSessionUser();
+        Post post = postRepository.findById(postDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        if (!post.getCreatedBy().getUsername().equals(username)) {  // Changed to get username from UserEntity
+            throw new IllegalStateException("You are not authorized to update this post");
+        }
+
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+
+        postRepository.save(post);
+    }
+
+    @Override
+    public void deletePost(Long id) {
+        String username = SecurityUtil.getSessionUser();
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        if (!post.getCreatedBy().getUsername().equals(username)) {  // Changed to get username from UserEntity
+            throw new IllegalStateException("You are not authorized to delete this post");
+        }
+
+        postRepository.delete(post);
     }
 }

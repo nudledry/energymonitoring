@@ -7,21 +7,22 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class TargetUsageController {
+@RequestMapping("/user/dashboard")
+@PreAuthorize("hasRole('ROLE_USER')")
+public class UserTargetUsageController {
     UserEntityService userEntityService;
 
-    public TargetUsageController(UserEntityService userEntityService) {
+    public UserTargetUsageController(UserEntityService userEntityService) {
         this.userEntityService = userEntityService;
     }
 
-    @PostMapping("/user/dashboard/target")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping("/target")
     public String newTarget(@ModelAttribute("user") @Valid UserEntity userEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "user/dashboard";
@@ -30,6 +31,6 @@ public class TargetUsageController {
         UserEntity currentUser = userEntityService.findByUsername(auth.getName());
         currentUser.setTarget(userEntity.getTarget());
         userEntityService.saveTarget(currentUser);
-        return "redirect:/user/dashboard";
+        return "redirect:/user/dashboard?targetUpdated";
     }
 }

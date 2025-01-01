@@ -18,22 +18,20 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("user/dashboard/community")
-public class CommunityController {
+@PreAuthorize("hasRole('ROLE_USER')")
+public class UserCommunityController {
     private final PostService postService;
     private final CommentService commentService;
     private final UserEntityService userEntityService;
 
     @Autowired
-    public CommunityController(PostService postService,
-                               CommentService commentService,
-                               UserEntityService userEntityService) {
+    public UserCommunityController(PostService postService, CommentService commentService, UserEntityService userEntityService) {
         this.postService = postService;
         this.commentService = commentService;
         this.userEntityService = userEntityService;
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
     public String communityPage(Model model) {
         UserEntity user = new UserEntity();
         String username = SecurityUtil.getSessionUser();
@@ -50,7 +48,6 @@ public class CommunityController {
     }
 
     @GetMapping("/post/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
     public String postDetail(@PathVariable Long id, Model model) {
         UserEntity user = new UserEntity();
         String username = SecurityUtil.getSessionUser();
@@ -59,19 +56,63 @@ public class CommunityController {
             user = userEntityService.findByUsername(username);
             model.addAttribute("user", user);
 
-            model.addAttribute("post", postService.getPost(id));
+            PostDto post = postService.getPost(id);
+            model.addAttribute("post", post);
             model.addAttribute("comments", commentService.getPostComments(id));
             model.addAttribute("newComment", new CommentDto());
+            model.addAttribute("isPostCreator", post.getCreatedBy().equals(username));
         }
 
         return "user/post";
     }
 
+    @GetMapping("/post/{id}/edit")
+    public String editPostForm(@PathVariable Long id, Model model) {
+        PostDto post = postService.getPost(id);
+        String username = SecurityUtil.getSessionUser();
+
+        if (!post.getCreatedBy().equals(username)) {
+            return "redirect:/user/dashboard/community";
+        }
+
+        model.addAttribute("user", userEntityService.findByUsername(username));
+        model.addAttribute("post", post);
+        return "user/editPost";
+    }
+
+    @PostMapping("/post/{id}/edit")
+    public String updatePost(@PathVariable Long id, @Valid @ModelAttribute("post") PostDto postDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "user/editPost";
+        }
+
+        PostDto post = postService.getPost(id);
+        String username = SecurityUtil.getSessionUser();
+
+        if (!post.getCreatedBy().equals(username)) {
+            return "redirect:/user/dashboard/community";
+        }
+
+        postDto.setId(id);
+        postService.updatePost(postDto);
+        return "redirect:/user/dashboard/community/post/" + id;
+    }
+
+    @PostMapping("/post/{id}/delete")
+    public String deletePost(@PathVariable Long id) {
+        PostDto post = postService.getPost(id);
+        String username = SecurityUtil.getSessionUser();
+
+        if (post.getCreatedBy().equals(username)) {
+            postService.deletePost(id);
+        }
+
+        return "redirect:/user/dashboard/community";
+    }
+
+
     @PostMapping("/post/create")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public String createPost(@Valid @ModelAttribute("newPost") PostDto postDto,
-                             BindingResult bindingResult,
-                             Model model) {
+    public String createPost(@Valid @ModelAttribute("newPost") PostDto postDto, BindingResult bindingResult, Model model) {
         String username = SecurityUtil.getSessionUser();
 
         if (bindingResult.hasErrors()) {
@@ -85,7 +126,6 @@ public class CommunityController {
     }
 
     @PostMapping("/post/{postId}/comment")
-    @PreAuthorize("hasRole('ROLE_USER')")
     public String createComment(@PathVariable Long postId, @Valid @ModelAttribute("newComment") CommentDto commentDto, BindingResult bindingResult, Model model) {
         String username = SecurityUtil.getSessionUser();
 

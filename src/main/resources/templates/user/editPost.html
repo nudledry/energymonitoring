@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/dashboard-layout}">
+<head>
+    <title>Edit Post</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a th:href="@{/user/dashboard}">User Dashboard</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/user/dashboard/community}">Community</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/user/dashboard/community/post/{id}(id=${post.id})}">Post</a></li>
+            <li class="breadcrumb-item active">Edit Post</li>
+        </ol>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-edit me-1"></i>
+                Edit Post
+            </div>
+            <div class="card-body">
+                <form th:action="@{/user/dashboard/community/post/{id}/edit(id=${post.id})}" method="post" th:object="${post}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Content</label>
+                        <textarea class="form-control" id="content" th:field="*{content}" rows="5" required></textarea>
+                        <div class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Update Post</button>
+                        <a th:href="@{/user/dashboard/community/post/{id}(id=${post.id})}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

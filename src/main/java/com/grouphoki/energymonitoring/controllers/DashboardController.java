@@ -20,13 +20,11 @@ import java.util.List;
 public class DashboardController {
     private EnergyUsageService energyUsageService;
     private UserEntityService userEntityService;
-    private NewsService newsService;
 
     @Autowired
-    public DashboardController(EnergyUsageService energyUsageService, UserEntityService userEntityService, NewsService newsService) {
+    public DashboardController(EnergyUsageService energyUsageService, UserEntityService userEntityService) {
         this.energyUsageService = energyUsageService;
         this.userEntityService = userEntityService;
-        this.newsService = newsService;
     }
 
     @GetMapping("/admin/dashboard")
@@ -42,7 +40,7 @@ public class DashboardController {
             model.addAttribute("allUser", allUser);
         }
 
-        return "admin/dashboard"; // View name for admin dashboard
+        return "admin/dashboard";
     }
 
     @GetMapping("/user/dashboard")
@@ -69,22 +67,4 @@ public class DashboardController {
 
         return "user/dashboard";
     }
-
-    @GetMapping("/user/dashboard/news")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public String userNews(Model model) {
-        UserEntity user = new UserEntity();
-        String username = SecurityUtil.getSessionUser();
-
-        if (username != null) {
-            user = userEntityService.findByUsername(username);
-            model.addAttribute("user", user);
-
-            List<News> newsList = newsService.getAllNews();
-            model.addAttribute("newsList", newsList);
-        }
-
-        return "user/news";
-    }
-
 }

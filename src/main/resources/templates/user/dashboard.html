@@ -13,6 +13,27 @@
       <li class="breadcrumb-item active">User Dashboard</li>
     </ol>
 
+
+    <div th:if="${param.updated}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Data has been successfully changed</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${param.created}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Data has been successfully created</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${param.deleted}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Data has been successfully deleted</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${param.allDeleted}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>All data has been successfully deleted</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${param.targetUpdated}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Target has been successfully updated</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <!-- Energy Usage Card -->
     <div class="card mb-4">
       <div class="card-body d-flex align-items-center" style="background-color: #e0e0e0; border-radius: 15px;">
