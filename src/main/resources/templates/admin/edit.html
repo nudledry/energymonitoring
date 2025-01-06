@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/dashboard-layout}">
+      layout:decorate="~{layouts/dashboard-layout}"
+      lang="en"
+      xml:lang="en">
 <head>
     <title>Edit User</title>
 </head>
@@ -22,7 +24,7 @@
                 Edit User
             </div>
             <div class="card-body">
-                <form role="form" method="post" th:action="@{/admin/{userId}/edit(userId=${user.id})}" th:object="${user}">
+                <form method="post" th:action="@{/admin/{userId}/edit(userId=${user.id})}" th:object="${user}">
                     <div class="row">
                         <div class="mb-3 col-6">
                             <label for="username" class="form-label">Username</label>
