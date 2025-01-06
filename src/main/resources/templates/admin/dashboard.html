@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/admin-dashboard-layout}"
@@ -17,9 +16,7 @@
     </ol>
     <div class="card mb-4">
       <div class="card-body d-flex align-items-center" style="background-color: #e0e0e0; border-radius: 5px;">
-        <div style="width: 100px; height: 100px; border-radius: 50%; background-color: #b0b0b0; display: flex; align-items: center; justify-content: center;">
-          <span th:text="${user.username}" style="color: #fff; font-size: 24px; font-weight: bold;"></span>
-        </div>
+        <h3 th:text="${user.username}" class="text-dark"></h3>
       </div>
     </div>
     <!--Parameter Condition-->

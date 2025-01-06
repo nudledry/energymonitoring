@@ -1,6 +1,7 @@
 package com.grouphoki.energymonitoring.controllers;
 
 import com.grouphoki.energymonitoring.models.UserEntity;
+import com.grouphoki.energymonitoring.services.EnergyUsageService;
 import com.grouphoki.energymonitoring.services.UserEntityService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @PreAuthorize("hasRole('ROLE_USER')")
 public class UserTargetUsageController {
     UserEntityService userEntityService;
+    EnergyUsageService energyUsageService;
 
-    public UserTargetUsageController(UserEntityService userEntityService) {
+    public UserTargetUsageController(UserEntityService userEntityService, EnergyUsageService energyUsageService) {
         this.userEntityService = userEntityService;
+        this.energyUsageService = energyUsageService;
     }
 
     @PostMapping("/target")
@@ -29,6 +32,7 @@ public class UserTargetUsageController {
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity currentUser = userEntityService.findByUsername(auth.getName());
+        energyUsageService.deleteAllByUser(currentUser);
         currentUser.setTarget(userEntity.getTarget());
         userEntityService.saveTarget(currentUser);
         return "redirect:/user/dashboard?targetUpdated";
