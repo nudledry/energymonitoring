@@ -4,6 +4,53 @@
         layout:decorate="~{layouts/layout}">
 <head>
     <title>Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            border-radius: 30px;
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 5px rgba(80, 120, 200, 0.8);
+            border-color: #5078c8;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(to right, #0056b3, #004085);
+        }
+        label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .alert {
+            border-radius: 20px;
+            text-align: center;
+        }
+        .small a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .small a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body class="d-flex flex-column h-100">
 <section layout:fragment="body" class="py-5">
@@ -12,16 +59,18 @@
             <div th:if="${param.success}" class="alert alert-success">
                 You are registered successfully!
             </div>
-            <div th:if="${param.fail}" class="alert alert-secondary">
+            <div th:if="${param.fail}" class="alert alert-danger">
                 Username or email already exist!
             </div>
             <div class="row justify-content-center">
-                <div class="col-lg-7">
+                <div class="col-lg-6">
                     <div class="card shadow-lg border-0 rounded-lg mt-5">
-                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                        <div class="card-header text-center">
+                            <h3 class="font-weight-light my-4">Create Account</h3>
+                        </div>
                         <div class="card-body">
                             <form role="form" method="post" th:action="@{/register/save}" th:object="${user}">
-                                <div class=" mb-3">
+                                <div class="mb-3">
                                     <label for="username" class="form-label">Username</label>
                                     <input
                                             type="text"
@@ -52,12 +101,16 @@
                                     <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></p>
                                 </div>
                                 <div class="mt-4 mb-0">
-                                    <div class="d-grid"><button type="submit" class="btn btn-primary btn-block">Create Account</button></div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                         <div class="card-footer text-center py-3">
-                            <div class="small"><a th:href="@{/login}">Have an account? Go to login</a></div>
+                            <div class="small">
+                                <a th:href="@{/login}">Have an account? Go to login</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -65,6 +118,6 @@
         </div>
     </main>
 </section>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
