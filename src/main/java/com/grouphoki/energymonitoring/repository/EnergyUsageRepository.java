@@ -14,5 +14,5 @@ public interface EnergyUsageRepository extends JpaRepository<EnergyUsage, Long> 
             "FROM EnergyUsage e WHERE e.createdBy = :createdBy")
     List<EnergyUsageDto> findByCreatedBy(@Param("createdBy") UserEntity createdBy);
 
-    void deleteAllByCreatedBy(UserEntity user);
+    void deleteAllByCreatedBy(UserEntity user);  
 }

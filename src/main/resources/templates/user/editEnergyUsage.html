@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/dashboard-layout}">
+      layout:decorate="~{layouts/dashboard-layout}"
+      lang="en"
+      xml:lang="en">
 <head>
     <title>Dashboard</title>
 </head>
@@ -20,7 +22,7 @@
                 Edit Energy Usage
             </div>
             <div class="card-body">
-                <form role="form" method="post" th:action="@{/user/dashboard/edit/{id}(id=${energyUsage.id})}" th:object="${energyUsage}">
+                <form method="post" th:action="@{/user/dashboard/edit/{id}(id=${energyUsage.id})}" th:object="${energyUsage}">
                     <div class="row">
                         <div class="mb-3 col-6">
                             <label for="time" class="form-label">Time</label>
