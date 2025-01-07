@@ -50,13 +50,17 @@ public class AdminController {
 
     @PostMapping("/{userId}/delete")
     public String delete(@PathVariable Long userId) {
-        UserEntity existingUser = userEntityService.findById(userId);
-        if (existingUser != null) {
+        try {
+            UserEntity existingUser = userEntityService.findById(userId);
+            if (existingUser == null) {
+                return "redirect:/admin/dashboard?userNotFound";
+            }
+
             userEntityService.deleteUserEntity(existingUser);
             return "redirect:/admin/dashboard?deleted";
+        } catch (Exception e) {
+            return "redirect:/admin/dashboard?error";
         }
-
-        return "redirect:/admin/dashboard?userNotFound";
     }
 
     @GetMapping("/new")
